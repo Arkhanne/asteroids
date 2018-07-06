@@ -30,10 +30,10 @@ Se realiza el proyecto con tecnología **Canvas** y utilizando **Javascript** co
     * bala ovni / nave
 
 ## Game States and Transitions
-1. buildSplash
+1. (game start) buildSplash
 2. (begin play) destroySplash + buidGame
-3. destroySplash + buildGameOver
-4. buildSplash + destroyGameOver
+3. (end play) destroySplash + buildGameOver
+4. (back to game start) buildSplash + destroyGameOver
 
 ##  Estructuras de Datos
 
