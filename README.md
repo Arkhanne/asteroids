@@ -13,7 +13,7 @@ Se realiza el proyecto con tecnología **Canvas** y utilizando **Javascript** co
 2. Situar la nave en el centro de la pantalla.
 3. Poder rotar la nave sobre ella misma.
 4. Poder disparar.
-5. Generar asterorides que se acerquen a la nave desde direcciones aleatorias.
+5. Generar un asteroide que aparezca en una posición aleatoria y se mueva en una dirección aleatoria.
 6. Controlar las colisiones.
     * nave / asteroide
     * bala / asteroide
@@ -21,10 +21,11 @@ Se realiza el proyecto con tecnología **Canvas** y utilizando **Javascript** co
 8. Controlar las vidas.
 
 ## Backlog
-* Los asteroides pueden tener diferentes tamaños. Al destruirlos se dividen en asteroides más pequeños.
+* Los asteroides al destruirlos se dividen en asteroides más pequeños.
 * La nave se puede desplazar con inercia.
+* Teletransporte.
 * Super disparo.
-* Aleatoriamente puede aparecer un ovni en una dirección también aleatoria. El ovni dispara a la nave. Hay que controlar nuevas colisiones.
+* Aleatoriamente puede aparecer un ovni en una dirección también aleatoria. El ovni dispara. Hay que controlar nuevas colisiones.
     * nave / ovni
     * bala nave / ovni
     * bala ovni / nave
