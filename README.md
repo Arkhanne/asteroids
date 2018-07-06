@@ -18,11 +18,11 @@ Se realiza el proyecto con tecnología **Canvas** y utilizando **Javascript** co
     * nave / asteroide
     * bala / asteroide
 7. Controlar la puntuación.
-8. Controlar las vidas.
 
 ## Backlog
-* Los asteroides al destruirlos se dividen en asteroides más pequeños.
+* Controlar las vidas.
 * La nave se puede desplazar con inercia.
+* Los asteroides al destruirlos se dividen en asteroides más pequeños.
 * Teletransporte.
 * Super disparo.
 * Aleatoriamente puede aparecer un ovni en una dirección también aleatoria. El ovni dispara. Hay que controlar nuevas colisiones.
@@ -33,12 +33,63 @@ Se realiza el proyecto con tecnología **Canvas** y utilizando **Javascript** co
 ## Game States and Transitions
 1. (game start) buildSplash
 2. (begin play) destroySplash + buidGame
-3. (end play) destroySplash + buildGameOver
+3. (end play) destroyGame + buildGameOver 
 4. (back to game start) buildSplash + destroyGameOver
 
 ##  Estructuras de Datos
+### main.js
+* buildSplash
+* destroySplash
+* buidGame
+* destroyGame
+* buildGameOver
+* destroyGameOver
 
-Definicion de clases y métodos.
+### Class Game
+#### Properties
+* Ship ship
+* Array asteroids[Asteroid]
+* Array bullets[Bullet]
+* Number score
+* Number lifes
+* Frame frame
+#### Methods
+* checkCollision
+* doFrame
+* update
+
+### Class Ship
+#### Properties
+* position {}
+* size
+#### Methods
+* spinLeft
+* spinRight
+* shoot
+
+### Class Asteroid
+#### Properties
+* position {}
+* size
+* direction
+#### Methods
+* move
+
+### Class Bullet
+* position {}
+* size
+* direction
+#### Methods
+* move
+
+### Class Render
+#### Properties
+#### Methods
+* drawShip
+* drawAsteroid
+* drawBullet
+* drawScore
+* drawLifes
 
 ## Task
 
