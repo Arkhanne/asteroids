@@ -93,17 +93,23 @@ Se realiza el proyecto con tecnología **Canvas** y utilizando **Javascript** co
 
 ## Task
 
-Definicion de las tareas por orden de prioridad
+1. Crear fichero index.html con estructura mínima
+2. Crear main.js
+3. Crear game.js
+4. Crear render.js
+5. Crear ship.js
+6. Crear asteroid.js
+7. Crear bullet.js
 
 ## Trello
 
-[Link url](https://trello.com)
+[Link url](https://trello.com/b/bOzQGdXN/asteroids)
 
 ## Git
 
 Especificar las url del proyecto y del deploy
 
-[Link Repositorio](http://github.com)
+[Link Repositorio](https://github.com/Arkhanne/asteroids)
 
 [Link Deploy](http://github.com)
 
