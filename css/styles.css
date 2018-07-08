@@ -1,0 +1,57 @@
+/* ---- reset ---- */
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  height: 768px;
+  margin: 0;
+  padding: 0;
+  background-color: #000000;
+}
+
+
+/* ---- typography ---- */
+
+@font-face { 
+  font-family: 'hyperspace'; 
+  src: url("../fonts/hyperspace/Hyperspace.otf");
+} 
+
+body {
+  color: #FFFFFF;
+  font-family: 'hyperspace';
+  font-size: 16px;
+  line-height: 147%;
+}
+
+h1 {
+  font-size: 5em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {}
+
+p {
+  margin: 0;
+}
+
+
+/* Splash screen */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 100px;
+}
+
+.game-title {
+  margin: 0 auto;
+  text-align: center;
+}
