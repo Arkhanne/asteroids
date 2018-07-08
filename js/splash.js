@@ -18,4 +18,6 @@ Splash.prototype.draw = function() {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText('PRESS SPACE TO PLAY', 500, 400);
+
+  console.log('Splash');
 }

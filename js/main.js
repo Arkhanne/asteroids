@@ -3,7 +3,9 @@ document.addEventListener("keydown", buildGame);
 
 function buildGame (e) {
   if (e.keyCode === 32) {
-    console.log("buildGame");
+    var game = new Game();
+
+    game.init();
   }
 }
 
