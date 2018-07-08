@@ -63,8 +63,8 @@ Se realiza el proyecto con tecnología **Canvas** y utilizando **Javascript** co
 * position {}
 * size
 #### Methods
-* spinLeft
-* spinRight
+* rotateLeft
+* rotateRight
 * shoot
 
 ### Class Asteroid
@@ -76,6 +76,7 @@ Se realiza el proyecto con tecnología **Canvas** y utilizando **Javascript** co
 * move
 
 ### Class Bullet
+#### Properties
 * position {}
 * size
 * direction
@@ -85,6 +86,7 @@ Se realiza el proyecto con tecnología **Canvas** y utilizando **Javascript** co
 ### Class Render
 #### Properties
 #### Methods
+* drawScreen
 * drawShip
 * drawAsteroid
 * drawBullet
