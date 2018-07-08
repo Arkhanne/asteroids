@@ -1,8 +1,8 @@
-function Splash() {
+function GameOver() {
   
 }
 
-Splash.prototype.draw = function() {
+GameOver.prototype.draw = function() {
   var ctx = document.querySelector('canvas').getContext('2d');
   ctx.fillStyle = '#000000';
   ctx.fillRect(0, 0, 1024, 768);
@@ -11,11 +11,13 @@ Splash.prototype.draw = function() {
   ctx.fillStyle = '#FFFFFF';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('ASTEROIDS', 500, 300);
+  ctx.fillText('GAME OVER', 500, 300);
 
   ctx.font = '1.5em hyperspace';
   ctx.fillStyle = '#FFFFFF';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('PRESS SPACE TO PLAY', 500, 400);
+  ctx.fillText('THANKS FOR PLAYING ASTEROIDS', 500, 400);
+
+  console.log('Game Over');
 }

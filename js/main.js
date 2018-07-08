@@ -1,18 +1,43 @@
 
-document.addEventListener("keydown", buildGame);
+var game = new Game();
+var intervalID;
+var restart = false;
 
-function buildGame (e) {
-  if (e.keyCode === 32) {
-    var game = new Game();
+document.addEventListener("keydown", keyDown);
 
-    game.init();
+function buildGameOver() {
+  if (game.gameOver) {
+    clearInterval(intervalID);
+    var gameOver = new GameOver();
+    gameOver.draw();
+    restart = true;
   }
+}
+
+function buildGame () {
+  game.init();
 }
 
 function bluidSplash() {
   var splash = new Splash();
 
   splash.draw();
+  restart = false;
 }
 
-document.fonts.load('10pt "hyperspace"').then(bluidSplash);
+function init() {
+  bluidSplash();
+  intervalID = setInterval(buildGameOver, 500);
+}
+
+function keyDown(e) {
+  if (e.keyCode === 32) {
+    if (restart) {
+      bluidSplash();
+    } else {
+      buildGame();
+    }
+  }
+}
+
+document.fonts.load('10pt "hyperspace"').then(init);
