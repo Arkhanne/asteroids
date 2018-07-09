@@ -10,6 +10,7 @@ html {
 body {
   margin: 0;
   padding: 0;
+  background-color: #000000;
 }
 
 
@@ -19,3 +20,12 @@ body {
   font-family: 'hyperspace'; 
   src: url('../fonts/hyperspace/Hyperspace.otf');
 } 
+
+.container {
+  width: 1024px;
+  margin: 75px auto;
+}
+
+#canvas {
+  border: 1px solid #666666;
+}

@@ -13,14 +13,14 @@ Ship.prototype.rotateLeft = function() {
 }
 
 Ship.prototype._incrementAngle = function() {
-  this.angle += 5;
+  this.angle += 3;
   if (this.angle > 360) {
     this.angle = 0;
   }
 }
 
 Ship.prototype._decrementAngle = function() {
-  this.angle -= 5;
+  this.angle -= 3;
   if (this.angle > 360) {
       this.angle = 0;
   }
