@@ -1,43 +1,38 @@
-
-var game = new Game();
-var intervalID;
 var restart = false;
 
-document.addEventListener("keydown", keyDown);
-
-function buildGameOver() {
-  if (game.gameOver) {
-    clearInterval(intervalID);
-    var gameOver = new GameOver();
-    gameOver.draw();
-    restart = true;
-  }
+function endGame() {
+  var render = new Render(document.querySelector('canvas').getContext('2d'));
+  var gameOver = new GameOver(render);
+  gameOver.draw();
+  restart = true;
 }
 
 function buildGame () {
+  var render = new Render(document.querySelector('canvas').getContext('2d'));
+  var game = new Game(render, endGame);
   game.init();
 }
 
-function bluidSplash() {
-  var splash = new Splash();
-
+function buildSplash() {
+  var render = new Render(document.querySelector('canvas').getContext('2d'));
+  var splash = new Splash(render);
   splash.draw();
   restart = false;
-}
-
-function init() {
-  bluidSplash();
-  intervalID = setInterval(buildGameOver, 500);
 }
 
 function keyDown(e) {
   if (e.keyCode === 32) {
     if (restart) {
-      bluidSplash();
+      buildSplash();
     } else {
       buildGame();
     }
   }
 }
 
+function init() {
+  buildSplash();
+}
+
+document.addEventListener("keydown", keyDown);
 document.fonts.load('10pt "hyperspace"').then(init);

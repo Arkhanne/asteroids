@@ -1,21 +1,19 @@
-function Splash() {
-  
+function Splash(render) {
+  this.render = render;
 }
 
 Splash.prototype.draw = function() {
-  var ctx = document.querySelector('canvas').getContext('2d');
-  ctx.fillStyle = '#000000';
-  ctx.fillRect(0, 0, 1024, 768);
+  var options;
 
-  ctx.font = '4em hyperspace';
-  ctx.fillStyle = '#FFFFFF';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('ASTEROIDS', 500, 300);
+  this.render.resetCanvas();
 
-  ctx.font = '1.5em hyperspace';
-  ctx.fillStyle = '#FFFFFF';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('PRESS SPACE TO PLAY', 500, 400);
+  options = {font: '4em hyperspace',
+            fillStyle: '#FFFFFF',
+            textAlign: 'center',
+            textBaseline: 'middle'};
+  
+  this.render.drawText('ASTEROIDS', 500, 300, options);
+
+  options.font = '1.5em hyperspace';
+  this.render.drawText('PRESS SPACE TO PLAY', 500, 400, options);
 }
