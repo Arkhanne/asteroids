@@ -15,3 +15,19 @@ Render.prototype.drawText = function(text, x, y, options) {
 
   this.ctx.fillText(text, x, y);
 }
+
+Render.prototype.drawSplash = function() {
+  var options;
+
+  this.resetCanvas();
+
+  options = {font: '4em hyperspace',
+            fillStyle: '#FFFFFF',
+            textAlign: 'center',
+            textBaseline: 'middle'};
+  
+  this.drawText('ASTEROIDS', 500, 300, options);
+
+  options.font = '1.5em hyperspace';
+  this.drawText('PRESS SPACE TO PLAY', 500, 400, options);
+}

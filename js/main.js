@@ -15,8 +15,7 @@ function buildGame () {
 
 function buildSplash() {
   var render = new Render(document.querySelector('canvas').getContext('2d'));
-  var splash = new Splash(render);
-  splash.draw();
+  render.drawSplash();
   restart = false;
 }
 
