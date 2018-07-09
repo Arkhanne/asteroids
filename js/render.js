@@ -63,6 +63,29 @@ Render.prototype.drawShip = function(ship) {
   this._ctx.restore();
 }
 
+Render.prototype.drawAsteroid = function(asteroid) {
+  // Draw asteroid
+  this._ctx.strokeStyle = '#FFFFFF';
+  this._ctx.beginPath();
+  //this._ctx.rect(asteroid.x, asteroid.y, 100, 100);
+  var x = 2;
+  this._ctx.moveTo(asteroid.x, asteroid.y);
+  this._ctx.lineTo(asteroid.x + 80, asteroid.y);
+  this._ctx.lineTo(asteroid.x + 112, asteroid.y + 32);
+  this._ctx.lineTo(asteroid.x + 112, asteroid.y + 72);
+  this._ctx.lineTo(asteroid.x + 96, asteroid.y + 88);
+  this._ctx.lineTo(asteroid.x + 96, asteroid.y + 128);
+  this._ctx.lineTo(asteroid.x + 80, asteroid.y + 144);
+  this._ctx.lineTo(asteroid.x + 40, asteroid.y + 144);
+  this._ctx.lineTo(asteroid.x + 24, asteroid.y + 128);
+  this._ctx.lineTo(asteroid.x - 16, asteroid.y + 128);
+  this._ctx.lineTo(asteroid.x - 32, asteroid.y + 112);
+  this._ctx.lineTo(asteroid.x - 32, asteroid.y + 72);
+  this._ctx.lineTo(asteroid.x, asteroid.y + 40);
+  this._ctx.closePath();
+  this._ctx.stroke();
+}
+
 Render.prototype._convertToRadians = function(degree) {
   return degree * (Math.PI / 180);
 }

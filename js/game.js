@@ -11,6 +11,7 @@ function Game(render) {
   this._gameInterval;
 
   this._ship = new Ship();
+  this._asteroids = [new Asteroid];
 }
 
 Game.prototype.init = function() {
@@ -66,6 +67,7 @@ Game.prototype._update = function() {
     }
   
     this._render.drawShip(this._ship);
+    this._render.drawAsteroid(this._asteroids[0]);
     this._gameInterval = window.requestAnimationFrame(this._update.bind(this));
   }
 }
