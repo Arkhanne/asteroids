@@ -2,8 +2,7 @@ var restart = false;
 
 function endGame() {
   var render = new Render(document.querySelector('canvas').getContext('2d'));
-  var gameOver = new GameOver(render);
-  gameOver.draw();
+  render.drawGameOver();
   restart = true;
 }
 

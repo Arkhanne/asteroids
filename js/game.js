@@ -7,7 +7,7 @@ function Game(render, endGame) {
 
 Game.prototype.init = function() {
   this.render.resetCanvas();
-  this._intervalID = setInterval(this._gameOver.bind(this), 4000);
+  this._intervalID = setInterval(this._gameOver.bind(this), 2000);
 }
 
 Game.prototype._gameOver = function() {
