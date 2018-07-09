@@ -11,7 +11,7 @@ function Render(ctx) {
                     textBaseline: 'middle'};
 }
 
-Render.prototype.resetCanvas = function() {
+Render.prototype._resetCanvas = function() {
   this.ctx.fillStyle = '#000000';
   this.ctx.fillRect(0, 0, 1024, 768);
 }
@@ -26,13 +26,18 @@ Render.prototype.drawText = function(text, x, y, options) {
 }
 
 Render.prototype.drawSplash = function() {
-  this.resetCanvas();
+  this._resetCanvas();
   this.drawText('ASTEROIDS', 500, 300, this._mainTitle);
   this.drawText('PRESS SPACE TO PLAY', 500, 400, this._subTitle);
 }
 
 Render.prototype.drawGameOver = function() {
-  this.resetCanvas();
+  this._resetCanvas();
   this.drawText('GAME OVER', 500, 300, this._mainTitle);
   this.drawText('THANKS FOR PLAYING ASTEROIDS', 500, 400, this._subTitle);
+}
+
+Render.prototype.drawGame = function() {
+  this._resetCanvas();
+  this._drawShip();
 }

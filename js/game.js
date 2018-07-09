@@ -5,7 +5,6 @@ function Game(render) {
   this._GAME_STATE = 1
   this._END_STATE = 2;
 
-  this._intervalID = undefined;
   this._nowPlaying = false;
   this._nowGameOver = false;
 }
@@ -16,12 +15,11 @@ Game.prototype.init = function() {
 }
 
 Game.prototype._beginGame = function() {
-  this.render.resetCanvas();
+  this.render.drawGame();
   this._changeState(this._GAME_STATE);
 }
 
 Game.prototype._gameOver = function() {
-  this._intervalID = undefined;
   this.render.drawGameOver();
   this._changeState(this._END_STATE);
 }
