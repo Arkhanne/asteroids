@@ -1,6 +1,5 @@
 function Render(ctx) {
-  this.ctx = ctx;
-
+  this._ctx = ctx;
   this._mainTitle = {font: '4em hyperspace',
                     fillStyle: '#FFFFFF',
                     textAlign: 'center',
@@ -12,17 +11,17 @@ function Render(ctx) {
 }
 
 Render.prototype._resetCanvas = function() {
-  this.ctx.fillStyle = '#000000';
-  this.ctx.fillRect(0, 0, 1024, 768);
+  this._ctx.fillStyle = '#000000';
+  this._ctx.fillRect(0, 0, 1024, 768);
 }
 
 Render.prototype.drawText = function(text, x, y, options) {
-  this.ctx.font = options.font ? options.font : this.ctx.font;
-  this.ctx.fillStyle = options.fillStyle ? options.fillStyle : this.ctx.fillStyle;
-  this.ctx.textAlign = options.textAlign ? options.textAlign : this.ctx.textAlign;
-  this.ctx.textBaseline = options.textBaseline ? options.textBaseline : this.ctx.textBaseline;
+  this._ctx.font = options.font ? options.font : this._ctx.font;
+  this._ctx.fillStyle = options.fillStyle ? options.fillStyle : this._ctx.fillStyle;
+  this._ctx.textAlign = options.textAlign ? options.textAlign : this._ctx.textAlign;
+  this._ctx.textBaseline = options.textBaseline ? options.textBaseline : this._ctx.textBaseline;
 
-  this.ctx.fillText(text, x, y);
+  this._ctx.fillText(text, x, y);
 }
 
 Render.prototype.drawSplash = function() {
@@ -37,7 +36,33 @@ Render.prototype.drawGameOver = function() {
   this.drawText('THANKS FOR PLAYING ASTEROIDS', 500, 400, this._subTitle);
 }
 
-Render.prototype.drawGame = function() {
+Render.prototype.drawGame = function(ship) {
   this._resetCanvas();
-  this._drawShip();
+  this.drawShip(ship);
+}
+
+Render.prototype.drawShip = function(ship) {
+  // Canvas rotation
+  this._resetCanvas();
+  this._ctx.save();                
+  this._ctx.translate(ship.x + 13, ship.y + 9);
+  this._ctx.rotate(this._convertToRadians(ship.angle));
+  this._ctx.translate(-(ship.x + 13), -(ship.y + 9));
+  this._ctx.strokeStyle = '#FFFFFF';
+
+  // Draw ship
+  this._ctx.beginPath();
+  this._ctx.moveTo(ship.x, ship.y);
+  this._ctx.lineTo(ship.x + 26, ship.y + 9);
+  this._ctx.lineTo(ship.x, ship.y + 18);
+  this._ctx.moveTo(ship.x + 4, ship.y + 1);
+  this._ctx.lineTo(ship.x + 4, ship.y + 17);
+  this._ctx.stroke();
+
+  // Restore canvas
+  this._ctx.restore();
+}
+
+Render.prototype._convertToRadians = function(degree) {
+  return degree * (Math.PI / 180);
 }
