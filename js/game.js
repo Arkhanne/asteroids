@@ -6,12 +6,15 @@ function Game(render) {
   this._render = render;
   this._nowPlaying = false;
   this._nowGameOver = false;
+  this._canShoot = false;
   this._keys = {arrowRight: false,
                 arrowLeft: false};
   this._gameInterval;
+  this._removeBulletIndexes = [];
 
   this._ship = new Ship();
   this._asteroids = [new Asteroid];
+  this._bullets = [];
 }
 
 Game.prototype.init = function() {
@@ -67,9 +70,38 @@ Game.prototype._update = function() {
     }
   
     this._asteroids[0].newPosition();
-    this._render.drawGame(this._ship, this._asteroids);
+
+    if (this._bullets) {
+      if (this._bullets.length > 0) {
+        for (var i = 0; i < this._bullets.length; i++) {
+          // this._bullets[i].life--;
+          if (this._bullets[i].alive) {
+            this._bullets[i].newPosition();
+          } else {
+            this._removeBulletIndexes.push(i);
+          }
+        }
+      }
+    }
+
+    this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes);
+
+    for (var i = 0; i < this._removeBulletIndexes.length; i++) {
+      this._bullets.splice(this._removeBulletIndexes[i], 1);
+    }
+
+    this._removeBulletIndexes = [];
+
     this._gameInterval = window.requestAnimationFrame(this._update.bind(this));
+    console.log(this._bullets);
   }
+}
+
+Game.prototype._shoot = function() {
+  var length;
+
+  length = this._bullets.push(this._ship.shoot());
+  this._bullets[length - 1].initLive();
 }
 
 Game.prototype._assignControlsToKeys = function () {
@@ -107,6 +139,16 @@ Game.prototype._assignControlsToKeys = function () {
 
   window.addEventListener('keyup', function (e) {
     switch (e.keyCode) {
+      case 32: //space
+        if (!this._canShoot) {
+         this. _canShoot = true;
+        } else {
+          if (this._nowPlaying) {
+            this._shoot();
+          }
+        }
+        break;
+
       case 38: //arrow up
         break;
 
