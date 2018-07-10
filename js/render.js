@@ -36,7 +36,7 @@ Render.prototype.drawGameOver = function() {
   this.drawText('THANKS FOR PLAYING ASTEROIDS', 500, 400, this._subTitle);
 }
 
-Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndexes, removeAsteroidIndexes) {
+Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndexes, removeAsteroidIndexes, removeShip) {
   var removeBullet = false;
   var removeAsteroid = false;
 
@@ -44,7 +44,7 @@ Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndex
   
   // Draw ship
   this._ctx.save(); // Guardo el estado actual del canvas
-  this.drawShip(ship);
+  this.drawShip(ship, removeShip);
   this._ctx.restore(); // Restauro el estado del canvas guardado
   
   // Draw asteroid
@@ -83,12 +83,17 @@ Render.prototype._canvasRotation = function(x, y, angle) {
   this._ctx.translate(-x, -y); // Traslado el eje 0,0 a su posición original
 }
 
-Render.prototype.drawShip = function(ship) {
+Render.prototype.drawShip = function(ship, removeShip) {
   // Canvas rotation
   this._canvasRotation(ship.x + 13, ship.y + 9, ship.angle);        
 
   // Draw ship
-  this._ctx.strokeStyle = '#FFFFFF';
+  if (removeShip) {
+    this._ctx.strokeStyle = '#000000';
+  } else {
+    this._ctx.strokeStyle = '#FFFFFF';
+  }
+
   this._ctx.beginPath();
   this._ctx.moveTo(ship.x, ship.y);
   this._ctx.lineTo(ship.x + 26, ship.y + 9);
@@ -108,6 +113,7 @@ Render.prototype.drawAsteroid = function(asteroid, removeAsteroid) {
   } else {
     this._ctx.strokeStyle = '#FFFFFF';
   }
+
   this._ctx.beginPath();
   this._ctx.moveTo(asteroid.x, asteroid.y);
   this._ctx.lineTo(asteroid.x + 80, asteroid.y);

@@ -12,9 +12,10 @@ function Game(render) {
   this._gameInterval;
   this._removeBulletIndexes = [];
   this._removeAsteroidIndexes = [];
+  this._removeShip = false;
 
   this._ship = new Ship();
-  this._asteroids = [new Asteroid];
+  this._asteroids = [];
   this._bullets = [];
 }
 
@@ -24,9 +25,16 @@ Game.prototype.init = function() {
 }
 
 Game.prototype._beginGame = function() {
-  this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes);
+  this._removeShip = false;
+  this._canShoot = false;
+  this._asteroids.push(new Asteroid);
+  this._drawGame();
   this._changeState(this._GAME_STATE);
   this._update();
+}
+
+Game.prototype._drawGame = function() {
+  this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes, this._removeShip);
 }
 
 Game.prototype._gameOver = function() {
@@ -110,8 +118,21 @@ Game.prototype._update = function() {
       }
     }
 
+    // Asteroid collisions
+    for (var asteroidIndex = 0; asteroidIndex < this._asteroids.length; asteroidIndex++) {
+      var asteroid = this._asteroids[asteroidIndex];
+      
+      if ((this._ship.x > asteroid.x - 32) && (this._ship.x < asteroid.x + 112) && (this._ship.y > asteroid.y) && (this._ship.y < asteroid.y + 144)) {
+        this._removeShip = true;
+
+        if (this._removeAsteroidIndexes.indexOf(asteroidIndex) === -1) {
+          this._removeAsteroidIndexes.push(asteroidIndex);
+        }
+      }
+    }
+
     // Render
-    this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes);
+    this._drawGame();
 
     // Remove bullets
     for (var i = 0; i < this._removeBulletIndexes.length; i++) {
@@ -124,6 +145,10 @@ Game.prototype._update = function() {
       this._asteroids.splice(this._removeAsteroidIndexes[i], 1);
     }
     this._removeAsteroidIndexes = [];
+
+    if (this._removeShip) {
+      this._gameOver();
+    }
 
     this._gameInterval = window.requestAnimationFrame(this._update.bind(this));
   }
