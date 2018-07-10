@@ -66,6 +66,7 @@ Game.prototype._update = function() {
       this._ship.rotateLeft();
     }
   
+    this._asteroids[0].newPosition();
     this._render.drawGame(this._ship, this._asteroids);
     this._gameInterval = window.requestAnimationFrame(this._update.bind(this));
   }

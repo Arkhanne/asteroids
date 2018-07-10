@@ -61,7 +61,7 @@ Render.prototype.drawShip = function(ship) {
   this._ctx.stroke();
 
   // Restore canvas
-  this._ctx.restore(); // Restaura el último canvas guardado como primera posición del drawing tate stack
+  this._ctx.restore(); // Restauro el estado del canvas guardado
 }
 
 Render.prototype.drawAsteroid = function(asteroid) {
