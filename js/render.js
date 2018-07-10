@@ -37,18 +37,28 @@ Render.prototype.drawGameOver = function() {
 }
 
 Render.prototype.drawGame = function(ship, asteroids) {
-  this._resetCanvas();
+  this._resetCanvas(); // Borro el estado del canvas
+  
+  // Draw ship
+  this._ctx.save(); // Guardo el estado actual del canvas
   this.drawShip(ship);
+  this._ctx.restore(); // Restauro el estado del canvas guardado
+  
+  // Draw asteroid
+  this._ctx.save(); // Guardo el estado actual del canvas
   this.drawAsteroid(asteroids[0]);
+  this._ctx.restore(); // Restauro el estado del canvas guardado
+}
+
+Render.prototype._canvasRotation = function(x, y, angle) {
+  this._ctx.translate(x, y); // Traslado el eje 0,0
+  this._ctx.rotate(this._convertToRadians(angle)); // Roto el canvas
+  this._ctx.translate(-x, -y); // Traslado el eje 0,0 a su posición original
 }
 
 Render.prototype.drawShip = function(ship) {
   // Canvas rotation
-  this._resetCanvas(); // Borro el estado del canvas
-  this._ctx.save(); // Guardo el estado actual del canvas                
-  this._ctx.translate(ship.x + 13, ship.y + 9); // Traslado el eje 0,0 al centro del ship
-  this._ctx.rotate(this._convertToRadians(ship.angle)); // Roto el canvas
-  this._ctx.translate(-(ship.x + 13), -(ship.y + 9)); // Traslado el eje 0,0 a su posición original
+  this._canvasRotation(ship.x + 13, ship.y + 9, ship.angle);        
 
   // Draw ship
   this._ctx.strokeStyle = '#FFFFFF';
@@ -59,17 +69,15 @@ Render.prototype.drawShip = function(ship) {
   this._ctx.moveTo(ship.x + 4, ship.y + 1);
   this._ctx.lineTo(ship.x + 4, ship.y + 17);
   this._ctx.stroke();
-
-  // Restore canvas
-  this._ctx.restore(); // Restauro el estado del canvas guardado
 }
 
 Render.prototype.drawAsteroid = function(asteroid) {
+  // Canvas rotation
+  this._canvasRotation(asteroid.x + 40, asteroid.y + 77, asteroid.rotationAngle); 
+
   // Draw asteroid
   this._ctx.strokeStyle = '#FFFFFF';
   this._ctx.beginPath();
-  //this._ctx.rect(asteroid.x, asteroid.y, 100, 100);
-  var x = 2;
   this._ctx.moveTo(asteroid.x, asteroid.y);
   this._ctx.lineTo(asteroid.x + 80, asteroid.y);
   this._ctx.lineTo(asteroid.x + 112, asteroid.y + 32);
