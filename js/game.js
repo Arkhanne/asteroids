@@ -20,7 +20,7 @@ Game.prototype.init = function() {
 }
 
 Game.prototype._beginGame = function() {
-  this._render.drawGame(this._ship);
+  this._render.drawGame(this._ship, this._asteroids);
   this._changeState(this._GAME_STATE);
   this._update();
 }
@@ -66,8 +66,7 @@ Game.prototype._update = function() {
       this._ship.rotateLeft();
     }
   
-    this._render.drawShip(this._ship);
-    this._render.drawAsteroid(this._asteroids[0]);
+    this._render.drawGame(this._ship, this._asteroids);
     this._gameInterval = window.requestAnimationFrame(this._update.bind(this));
   }
 }

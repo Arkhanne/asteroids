@@ -36,21 +36,22 @@ Render.prototype.drawGameOver = function() {
   this.drawText('THANKS FOR PLAYING ASTEROIDS', 500, 400, this._subTitle);
 }
 
-Render.prototype.drawGame = function(ship) {
+Render.prototype.drawGame = function(ship, asteroids) {
   this._resetCanvas();
   this.drawShip(ship);
+  this.drawAsteroid(asteroids[0]);
 }
 
 Render.prototype.drawShip = function(ship) {
   // Canvas rotation
-  this._resetCanvas();
-  this._ctx.save();                
-  this._ctx.translate(ship.x + 13, ship.y + 9);
-  this._ctx.rotate(this._convertToRadians(ship.angle));
-  this._ctx.translate(-(ship.x + 13), -(ship.y + 9));
-  this._ctx.strokeStyle = '#FFFFFF';
+  this._resetCanvas(); // Borro el estado del canvas
+  this._ctx.save(); // Guardo el estado actual del canvas                
+  this._ctx.translate(ship.x + 13, ship.y + 9); // Traslado el eje 0,0 al centro del ship
+  this._ctx.rotate(this._convertToRadians(ship.angle)); // Roto el canvas
+  this._ctx.translate(-(ship.x + 13), -(ship.y + 9)); // Traslado el eje 0,0 a su posición original
 
   // Draw ship
+  this._ctx.strokeStyle = '#FFFFFF';
   this._ctx.beginPath();
   this._ctx.moveTo(ship.x, ship.y);
   this._ctx.lineTo(ship.x + 26, ship.y + 9);
@@ -60,7 +61,7 @@ Render.prototype.drawShip = function(ship) {
   this._ctx.stroke();
 
   // Restore canvas
-  this._ctx.restore();
+  this._ctx.restore(); // Restaura el último canvas guardado como primera posición del drawing tate stack
 }
 
 Render.prototype.drawAsteroid = function(asteroid) {
