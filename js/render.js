@@ -36,8 +36,9 @@ Render.prototype.drawGameOver = function() {
   this.drawText('THANKS FOR PLAYING ASTEROIDS', 500, 400, this._subTitle);
 }
 
-Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndexes) {
+Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndexes, removeAsteroidIndexes) {
   var removeBullet = false;
+  var removeAsteroid = false;
 
   this._resetCanvas(); // Borro el estado del canvas
   
@@ -48,13 +49,21 @@ Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndex
   
   // Draw asteroid
   this._ctx.save(); // Guardo el estado actual del canvas
-  this.drawAsteroid(asteroids[0]);
-  this._ctx.restore(); // Restauro el estado del canvas guardado
+
+  for (var i = 0; i < asteroids.length; i++) {
+    if (removeAsteroidIndexes.indexOf(i) > -1) {
+      removeAsteroid = true;
+    } else {
+      removeAsteroid = false;
+    }
+
+    this.drawAsteroid(asteroids[0],removeAsteroid);
+    this._ctx.restore(); // Restauro el estado del canvas guardado
+  }
 
   // Draw bullet
   if (bullets) {
     if (bullets.length > 0) {
-      // this._ctx.save(); // Guardo el estado actual del canvas
       for (var i = 0; i < bullets.length; i++) {
         if (removeBulletIndexes.indexOf(i) > -1) {
           removeBullet = true;
@@ -64,7 +73,6 @@ Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndex
 
         this.drawBullet(ship, bullets[i], removeBullet);
       }
-      // this._ctx.restore(); // Restauro el estado del canvas guardado
     }
   }
 }
@@ -90,12 +98,16 @@ Render.prototype.drawShip = function(ship) {
   this._ctx.stroke();
 }
 
-Render.prototype.drawAsteroid = function(asteroid) {
+Render.prototype.drawAsteroid = function(asteroid, removeAsteroid) {
   // Canvas rotation
   this._canvasRotation(asteroid.x + 40, asteroid.y + 77, asteroid.rotationAngle); 
 
   // Draw asteroid
-  this._ctx.strokeStyle = '#FFFFFF';
+  if (removeAsteroid) {
+    this._ctx.strokeStyle = '#000000';
+  } else {
+    this._ctx.strokeStyle = '#FFFFFF';
+  }
   this._ctx.beginPath();
   this._ctx.moveTo(asteroid.x, asteroid.y);
   this._ctx.lineTo(asteroid.x + 80, asteroid.y);
@@ -115,10 +127,6 @@ Render.prototype.drawAsteroid = function(asteroid) {
 }
 
 Render.prototype.drawBullet = function(ship, bullet, removeBullet) {
-  // Canvas rotation
-  // this._canvasRotation(ship.x + 13, ship.y + 9, ship.angle);      
-
-  // Draw bullet
   if (removeBullet) {
     this._ctx.fillStyle = '#000000';
   } else {

@@ -11,6 +11,7 @@ function Game(render) {
                 arrowLeft: false};
   this._gameInterval;
   this._removeBulletIndexes = [];
+  this._removeAsteroidIndexes = [];
 
   this._ship = new Ship();
   this._asteroids = [new Asteroid];
@@ -23,7 +24,7 @@ Game.prototype.init = function() {
 }
 
 Game.prototype._beginGame = function() {
-  this._render.drawGame(this._ship, this._asteroids);
+  this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes);
   this._changeState(this._GAME_STATE);
   this._update();
 }
@@ -61,6 +62,7 @@ Game.prototype._drawSplash = function() {
 
 Game.prototype._update = function() {
   if (this._nowPlaying) {
+    // Ship
     if (this._keys.arrowRight) {
       this._ship.rotateRight();
     }
@@ -69,12 +71,17 @@ Game.prototype._update = function() {
       this._ship.rotateLeft();
     }
   
-    this._asteroids[0].newPosition();
+    // Asteroids
+    if (this._asteroids) {
+      if (this._asteroids.length > 0) {
+        this._asteroids[0].newPosition();
+      }
+    }
 
+    // Bullets
     if (this._bullets) {
       if (this._bullets.length > 0) {
         for (var i = 0; i < this._bullets.length; i++) {
-          // this._bullets[i].life--;
           if (this._bullets[i].alive) {
             this._bullets[i].newPosition();
           } else {
@@ -84,16 +91,41 @@ Game.prototype._update = function() {
       }
     }
 
-    this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes);
+    // Bullet collisions
+    for (var bulletIndex = 0; bulletIndex < this._bullets.length; bulletIndex++) {
+      var bullet = this._bullets[bulletIndex];
+      
+      for (var asteroidIndex = 0; asteroidIndex < this._asteroids.length; asteroidIndex++) {
+        var asteroid = this._asteroids[asteroidIndex];
+        
+        if ((bullet.x > asteroid.x - 32) && (bullet.x < asteroid.x + 112) && (bullet.y > asteroid.y) && (bullet.y < asteroid.y + 144)) {
+          if (this._removeBulletIndexes.indexOf(bulletIndex) === -1) {
+            this._removeBulletIndexes.push(bulletIndex);
+          }
 
+          if (this._removeAsteroidIndexes.indexOf(asteroidIndex) === -1) {
+            this._removeAsteroidIndexes.push(asteroidIndex);
+          }
+        }
+      }
+    }
+
+    // Render
+    this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes);
+
+    // Remove bullets
     for (var i = 0; i < this._removeBulletIndexes.length; i++) {
       this._bullets.splice(this._removeBulletIndexes[i], 1);
     }
-
     this._removeBulletIndexes = [];
 
+    // Remove asteroids
+    for (var i = 0; i < this._removeAsteroidIndexes.length; i++) {
+      this._asteroids.splice(this._removeAsteroidIndexes[i], 1);
+    }
+    this._removeAsteroidIndexes = [];
+
     this._gameInterval = window.requestAnimationFrame(this._update.bind(this));
-    console.log(this._bullets);
   }
 }
 

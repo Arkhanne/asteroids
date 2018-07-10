@@ -3,7 +3,6 @@ function Bullet() {
   this.y = 0;
   this._speed = 10;
   this.angle = 0;
-  // this.life = 125;
   this.alive = true;
 }
 

@@ -4,7 +4,7 @@ function Asteroid() {
   this._angle = Math.floor(Math.random() * 360);
   this._moveAngle = 0;
   this.rotationAngle = 0;
-  this._rotationDirection = Math.floor(Math.random() * 1); // 0: right    1: left
+  this._rotationDirection = Math.random() >= 0.5; // true: right    false: left
   this._speed = 1;
 }
 
@@ -29,7 +29,7 @@ Asteroid.prototype.newPosition = function() {
     this.y = 768;
   }
 
-  if (this._rotationDirection === 0) {
+  if (this._rotationDirection) {
     this._rotateRight();
   } else {
     this._rotateLeft();
@@ -37,14 +37,14 @@ Asteroid.prototype.newPosition = function() {
 }
 
 Asteroid.prototype._rotateRight = function() {
-  this.rotationAngle += 3;
+  this.rotationAngle += 0.5;
   if (this.rotationAngle > 360) {
     this.rotationAngle = 0;
   }
 }
 
 Asteroid.prototype._rotateLeft = function() {
-  this.rotationAngle -= 3;
+  this.rotationAngle -= 0.5;
   if (this.rotationAngle > 360) {
       this.rotationAngle = 0;
   }
