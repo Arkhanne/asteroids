@@ -138,7 +138,7 @@ Game.prototype._update = function() {
         this._removeShip = true;
 
         if (this._removeAsteroidIndexes.indexOf(asteroidIndex) === -1) {
-          asteroid.points = 0; 
+          asteroid.points = 0; x
           this._removeAsteroidIndexes.push(asteroidIndex);
         }
       }
