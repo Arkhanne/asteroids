@@ -27,9 +27,16 @@ Game.prototype.init = function() {
 }
 
 Game.prototype._beginGame = function() {
-  this._removeShip = false;
   this._canShoot = false;
+  this._removeBulletIndexes = [];
+  this._removeAsteroidIndexes = [];
+  this._removeShip = false;
   this._score = 0;
+  this._scoreToDraw = 0;
+  this._ship = new Ship();
+  this._asteroids = [];
+  this._bullets = [];
+
   this._addAsteroid();
   this._drawGame();
   this._changeState(this._GAME_STATE);
@@ -138,7 +145,7 @@ Game.prototype._update = function() {
         this._removeShip = true;
 
         if (this._removeAsteroidIndexes.indexOf(asteroidIndex) === -1) {
-          asteroid.points = 0; x
+          asteroid.points = 0; 
           this._removeAsteroidIndexes.push(asteroidIndex);
         }
       }
