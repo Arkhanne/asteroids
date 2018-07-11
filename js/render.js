@@ -40,7 +40,7 @@ Render.prototype.drawGameOver = function() {
   this.drawText('THANKS FOR PLAYING ASTEROIDS', 500, 400, this._subTitle);
 }
 
-Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndexes, removeAsteroidIndexes, removeShip, score) {
+Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndexes, removeAsteroidIndexes, removeShip, score, lives) {
   var removeBullet = false;
   var removeAsteroid = false;
 
@@ -82,6 +82,10 @@ Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndex
 
   // Draw score
   this.drawText(score, 200, 25, this._score);
+
+  // Draw lives
+  this._removeLives(ship.MAX_LIVES);
+  this._drawLives(ship.lives);
 }
 
 Render.prototype._canvasRotation = function(x, y, angle) {
@@ -151,4 +155,38 @@ Render.prototype.drawBullet = function(ship, bullet, removeBullet) {
 
 Render.prototype._convertToRadians = function(degree) {
   return degree * (Math.PI / 180);
+}
+
+Render.prototype._removeLives = function(numberOfLives) {
+  for (var i = 0; i < numberOfLives; i++) {
+    this._drawLive(i, '#000000');
+  }
+}
+
+Render.prototype._drawLives = function(numberOfLives) {
+  for (var i = 0; i < numberOfLives; i++) {
+    this._drawLive(i, '#BBBBBB');
+  }
+}
+
+Render.prototype._drawLive = function(position, color) {
+  var x = 150 + position * 25;
+  var y = 70
+
+  this._ctx.save(); // Guardo el estado actual del canvas
+  
+  // Canvas rotation
+  this._canvasRotation(x + 13, y + 9, 270); 
+
+  // Draw live
+  this._ctx.strokeStyle = color;
+  this._ctx.beginPath();
+  this._ctx.moveTo(x, y);
+  this._ctx.lineTo(x + 26, y + 9);
+  this._ctx.lineTo(x, y + 18);
+  this._ctx.moveTo(x + 4, y + 1);
+  this._ctx.lineTo(x + 4, y + 17);
+  this._ctx.stroke();
+
+  this._ctx.restore(); // Restauro el estado del canvas g
 }

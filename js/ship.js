@@ -1,7 +1,9 @@
 function Ship() {
+  this.MAX_LIVES = 3;
   this.x = 509;
   this.y = 375;
   this.angle = 0;
+  this.lives = this.MAX_LIVES;
 }
 
 Ship.prototype.rotateRight = function() {

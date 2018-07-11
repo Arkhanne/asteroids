@@ -29,7 +29,7 @@ Game.prototype.init = function() {
 Game.prototype._beginGame = function() {
   this._removeShip = false;
   this._canShoot = false;
-  this._scote = 0;
+  this._score = 0;
   this._addAsteroid();
   this._drawGame();
   this._changeState(this._GAME_STATE);
@@ -138,8 +138,18 @@ Game.prototype._update = function() {
         this._removeShip = true;
 
         if (this._removeAsteroidIndexes.indexOf(asteroidIndex) === -1) {
+          asteroid.points = 0;
           this._removeAsteroidIndexes.push(asteroidIndex);
         }
+      }
+    }
+
+    // Lives control
+    if (this._removeShip) {
+      this._ship.lives--;
+
+      if (this._ship.lives > 0) {
+        this._removeShip = false;
       }
     }
 
