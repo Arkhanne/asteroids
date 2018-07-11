@@ -14,6 +14,7 @@ function Game(render) {
   this._removeAsteroidIndexes = [];
   this._removeShip = false;
   this._score = 0;
+  this._scoreToDraw = 0;
 
   this._ship = new Ship();
   this._asteroids = [];
@@ -40,6 +41,11 @@ Game.prototype._addAsteroid = function() {
 }
 
 Game.prototype._drawGame = function() {
+  if (this._scoreToDraw > 0) {
+    this._score++
+    this._scoreToDraw--;
+  }
+
   this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes, this._removeShip, this._score);
 }
 
@@ -206,7 +212,7 @@ Game.prototype._assignControlsToKeys = function () {
   }.bind(this));
 
   Game.prototype._increaseScore = function(points) {
-    this._score += points;
+    this._scoreToDraw += points;
   }
 
   window.addEventListener('keyup', function (e) {
