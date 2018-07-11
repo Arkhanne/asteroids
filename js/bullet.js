@@ -1,8 +1,8 @@
-function Bullet() {
-  this.x = 0;
-  this.y = 0;
+function Bullet(x, y, angle) {
+  this.x = x;
+  this.y = y;
   this._speed = 10;
-  this.angle = 0;
+  this.angle = angle;
   this.alive = true;
 }
 

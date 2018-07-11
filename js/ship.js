@@ -27,15 +27,8 @@ Ship.prototype._decrementAngle = function() {
 }
 
 Ship.prototype.shoot = function() {
-  var bullet = new Bullet();
-
-  // bullet.x = this.x + 26 * Math.cos(2 * Math.PI * this.angle / 360);
-  // bullet.y = this.y + 9 * Math.sin(2 * Math.PI * this.angle / 360);
-
-  bullet.x = this.x;
-  bullet.y = this.y;
-
-  bullet.angle = this.angle;
-
-  return bullet;
+  var x = this.x + 13 + (13 * Math.cos(this.angle * 2 * Math.PI / 360));
+  var y = this.y + 9 + (13 * Math.sin(this.angle * 2 * Math.PI / 360));
+  
+  return new Bullet(x, y, this.angle);
 }
