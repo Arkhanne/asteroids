@@ -1,11 +1,21 @@
 function Asteroid() {
-  this.x = Math.floor(Math.random() * 1000);
-  this.y = Math.floor(Math.random() * 700);
+  this.x = 0;
+  this.y = 0;
   this._angle = Math.floor(Math.random() * 360);
   this._moveAngle = 0;
   this.rotationAngle = 0;
   this._rotationDirection = Math.random() >= 0.5; // true: right    false: left
   this._speed = 1;
+  this.points = 25;
+
+  this._initPosition();
+}
+
+Asteroid.prototype._initPosition = function() {
+  do {
+    this.x = Math.floor(Math.random() * 1000);
+    this.y = Math.floor(Math.random() * 700);
+  } while(this.x > 300 && this.x < 700 && this.y > 150 && this.y < 550);
 }
 
 Asteroid.prototype.newPosition = function() {

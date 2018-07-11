@@ -8,6 +8,10 @@ function Render(ctx) {
                     fillStyle: '#FFFFFF',
                     textAlign: 'center',
                     textBaseline: 'middle'};
+  this._score = {font: '3em hyperspace',
+                    fillStyle: '#999999',
+                    textAlign: 'center',
+                    textBaseline: 'middle'};                  
 }
 
 Render.prototype._resetCanvas = function() {
@@ -36,7 +40,7 @@ Render.prototype.drawGameOver = function() {
   this.drawText('THANKS FOR PLAYING ASTEROIDS', 500, 400, this._subTitle);
 }
 
-Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndexes, removeAsteroidIndexes, removeShip) {
+Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndexes, removeAsteroidIndexes, removeShip, score) {
   var removeBullet = false;
   var removeAsteroid = false;
 
@@ -75,6 +79,9 @@ Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndex
       }
     }
   }
+
+  // Draw score
+  this.drawText(score, 200, 25, this._score);
 }
 
 Render.prototype._canvasRotation = function(x, y, angle) {

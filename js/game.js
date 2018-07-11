@@ -13,6 +13,7 @@ function Game(render) {
   this._removeBulletIndexes = [];
   this._removeAsteroidIndexes = [];
   this._removeShip = false;
+  this._score = 0;
 
   this._ship = new Ship();
   this._asteroids = [];
@@ -27,14 +28,19 @@ Game.prototype.init = function() {
 Game.prototype._beginGame = function() {
   this._removeShip = false;
   this._canShoot = false;
-  this._asteroids.push(new Asteroid);
+  this._scote = 0;
+  this._addAsteroid();
   this._drawGame();
   this._changeState(this._GAME_STATE);
   this._update();
 }
 
+Game.prototype._addAsteroid = function() {
+  this._asteroids.push(new Asteroid);
+}
+
 Game.prototype._drawGame = function() {
-  this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes, this._removeShip);
+  this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes, this._removeShip, this._score);
 }
 
 Game.prototype._gameOver = function() {
@@ -142,12 +148,17 @@ Game.prototype._update = function() {
 
     // Remove asteroids
     for (var i = 0; i < this._removeAsteroidIndexes.length; i++) {
+      this._increaseScore(this._asteroids[this._removeAsteroidIndexes[i]].points);
       this._asteroids.splice(this._removeAsteroidIndexes[i], 1);
     }
     this._removeAsteroidIndexes = [];
 
     if (this._removeShip) {
       this._gameOver();
+    }
+
+    if (this._asteroids.length === 0) {
+      this._addAsteroid();
     }
 
     this._gameInterval = window.requestAnimationFrame(this._update.bind(this));
@@ -193,6 +204,10 @@ Game.prototype._assignControlsToKeys = function () {
         break; 
     }
   }.bind(this));
+
+  Game.prototype._increaseScore = function(points) {
+    this._score += points;
+  }
 
   window.addEventListener('keyup', function (e) {
     switch (e.keyCode) {
