@@ -3,6 +3,7 @@ function Game(render) {
   this._GAME_STATE = 1
   this._END_STATE = 2;
   this._TIME_TO_SHOOT = 200;
+  this._EXTRA_LIVE_BORDER = 10000;
 
   this._render = render;
   this._nowPlaying = false;
@@ -35,6 +36,7 @@ function Game(render) {
   this.audioBangSmall = new Audio('./audio/bangSmall.wav');
   this.audioBangLarge = new Audio('./audio/bangLarge.wav');
   this.audioBackground = new Audio('./audio/Kumiku.mp3');
+  this.audioExtraLive = new Audio('./audio/extraShip.wav');
 }
 
 Game.prototype.init = function() {
@@ -83,8 +85,17 @@ Game.prototype._addAsteroid = function(parentAsteroid) {
 
 Game.prototype._drawGame = function() {
   if (this._scoreToDraw > 0) {
-    this._score+=5
-    this._scoreToDraw-=5;
+    this._score += 5
+    this._scoreToDraw -= 5;
+  }
+
+  if (this._score > 0 && this._score % this._EXTRA_LIVE_BORDER === 0) {
+    this._increaseScore(5);
+    this._ship.lives++;
+    this._score += 5;
+    this._scoreToDraw -=5;
+    this._noExtraLive = true;
+    this.audioExtraLive.play();
   }
 
   this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes, this._removeShip, this._score);
