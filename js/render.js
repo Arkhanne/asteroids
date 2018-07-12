@@ -8,6 +8,10 @@ function Render(ctx) {
                     fillStyle: '#FFFFFF',
                     textAlign: 'center',
                     textBaseline: 'middle'};
+  this._smallText = {font: '1em hyperspace',
+                    fillStyle: '#FFFFFF',
+                    textAlign: 'left',
+                    textBaseline: 'middle'};
   this._score = {font: '3em hyperspace',
                     fillStyle: '#999999',
                     textAlign: 'center',
@@ -32,6 +36,20 @@ Render.prototype.drawSplash = function() {
   this._resetCanvas();
   this.drawText('ASTEROIDS', 500, 300, this._mainTitle);
   this.drawText('PRESS SPACE TO PLAY', 500, 400, this._subTitle);
+  this.drawText('Press <H> to help', 800, 750, this._smallText);
+}
+
+Render.prototype.drawHelp = function(visible) {
+  if (visible) {
+    this.drawText('<LEFT>  --> Rotate left', 700, 570, this._smallText);
+    this.drawText('<RIGHT> --> Rotate right', 700, 600, this._smallText);
+    this.drawText('<UP>    --> Increase speed', 700, 630, this._smallText);
+    this.drawText('<SPACE> --> Shoot', 700, 660, this._smallText);
+    this.drawText('<S>     --> Music ON/OFF', 700, 690, this._smallText);
+  } else {
+    this._ctx.fillStyle = '#000000';
+    this._ctx.fillRect(650, 550, 300, 150);
+  }
 }
 
 Render.prototype.drawGameOver = function() {

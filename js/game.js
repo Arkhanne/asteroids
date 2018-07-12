@@ -20,6 +20,7 @@ function Game(render) {
   this._level = 1;
   this._mute = false;
   this._state = this._INIT_STATE;
+  this._helpVisible = false;
 
   this._ship = new Ship();
   this._asteroids = [];
@@ -270,6 +271,34 @@ Game.prototype._setCanShoot = function () {
   this._canShoot = true;
 }
 
+Game.prototype._muteControl = function() {
+  if (this._mute) {
+    switch(this._state) {
+      case this._INIT_STATE:
+        this.audioIntro.play();
+        break;
+
+      case this._GAME_STATE:
+        this.audioBackground.play();
+        break;
+
+      case this._END_STATE:
+        this.audioGameOver.play();
+        break;
+    }
+    this._mute = false;
+  } else {
+    this.audioIntro.pause();
+    this.audioGameOver.pause();
+    this.audioBackground.pause();
+    this._mute = true;
+  }
+}
+
+Game.prototype._increaseScore = function(points) {
+  this._scoreToDraw += points;
+}
+
 Game.prototype._assignControlsToKeys = function () {
   window.addEventListener('keydown', function (e) {
     switch (e.keyCode) {
@@ -301,39 +330,16 @@ Game.prototype._assignControlsToKeys = function () {
         this._keys.arrowRight = true;
         break; 
 
+      case 72: //H
+        this._helpVisible = !this._helpVisible;
+        this._render.drawHelp(this._helpVisible);
+        break;
+
       case 83: //S
         this._muteControl();
         break;
     }
   }.bind(this));
-
-  Game.prototype._muteControl = function() {
-    if (this._mute) {
-      switch(this._state) {
-        case this._INIT_STATE:
-          this.audioIntro.play();
-          break;
-
-        case this._GAME_STATE:
-          this.audioBackground.play();
-          break;
-
-        case this._END_STATE:
-          this.audioGameOver.play();
-          break;
-      }
-      this._mute = false;
-    } else {
-      this.audioIntro.pause();
-      this.audioGameOver.pause();
-      this.audioBackground.pause();
-      this._mute = true;
-    }
-  }
-
-  Game.prototype._increaseScore = function(points) {
-    this._scoreToDraw += points;
-  }
 
   window.addEventListener('keyup', function (e) {
     switch (e.keyCode) {
