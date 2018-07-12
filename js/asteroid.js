@@ -51,16 +51,16 @@ Asteroid.prototype.newPosition = function() {
   this.x += this._speed * Math.sin(this._angle);
   this.y -= this._speed * Math.cos(this._angle);
 
-  if (this.x - 32 > 1024) {
-    this.x = 0 - 112;
+  if (this.x > 1024) {
+    this.x = 0;
   }
 
   if (this.y > 768) {
-    this.y = 0 - 144;
+    this.y = 0;
   }
 
   if (this.x + 112 < 0) {
-    this.x = 1024 + 32
+    this.x = 1024;
   }
 
   if (this.y + 144 < 0) {

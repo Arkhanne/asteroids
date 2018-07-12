@@ -176,9 +176,9 @@ Game.prototype._update = function() {
     if (this._removeShip) {
       this._ship.lives--;
 
-      if (this._ship.lives > 0) {
-        this._removeShip = false;
-      }
+      // if (this._ship.lives > 0) {
+      //   this._removeShip = false;
+      // }
     }
 
     // Render
@@ -199,15 +199,23 @@ Game.prototype._update = function() {
     }
     this._removeAsteroidIndexes = [];
 
-    if (this._removeShip) {
-      this._gameOver();
+    if (this._asteroids.length === 0) {
+      if (this._removeShip) {
+        this._addAsteroid();
+      } else {
+        this._level++;
+        for (var i = 0; i< this._level; i++) {
+          this._addAsteroid();
+        }  
+      }
     }
 
-    if (this._asteroids.length === 0) {
-      this._level++;
-      for (var i = 0; i< this._level; i++) {
-        this._addAsteroid();
-      }
+    if (this._ship.lives > 0) {
+      this._removeShip = false;
+    }
+
+    if (this._removeShip) {
+      this._gameOver();
     }
 
     this._gameInterval = window.requestAnimationFrame(this._update.bind(this));
