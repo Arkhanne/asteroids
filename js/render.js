@@ -12,6 +12,10 @@ function Render(ctx) {
                     fillStyle: '#FFFFFF',
                     textAlign: 'left',
                     textBaseline: 'middle'};
+  this._smallTextRight = {font: '1em hyperspace',
+                    fillStyle: '#FFFFFF',
+                    textAlign: 'right',
+                    textBaseline: 'middle'};
   this._score = {font: '3em hyperspace',
                     fillStyle: '#999999',
                     textAlign: 'center',
@@ -37,6 +41,8 @@ Render.prototype.drawSplash = function() {
   this.drawText('ASTEROIDS', 500, 300, this._mainTitle);
   this.drawText('PRESS SPACE TO PLAY', 500, 400, this._subTitle);
   this.drawText('Press <H> to help', 800, 750, this._smallText);
+  this.drawText('Press <F> to Hall of Fame', 50, 750, this._smallText);
+  this.drawText('Press <N> to enter your name', 400, 750, this._smallText);
 }
 
 Render.prototype.drawHelp = function(visible) {
@@ -49,6 +55,30 @@ Render.prototype.drawHelp = function(visible) {
   } else {
     this._ctx.fillStyle = '#000000';
     this._ctx.fillRect(650, 550, 310, 150);
+  }
+}
+
+Render.prototype.drawHallOfFame = function(hallOfFame, visible) {
+  if (visible) {
+    hallOfFame.sort(function(a, b) {
+      if (a.score > b.score) {
+        return -1;
+      }
+
+      if (a.score < b.score) {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    for (var i = 0; i < (hallOfFame.length > 7 ? 7 : hallOfFame.length); i++) {
+      this.drawText(i + 1 + '. ' + hallOfFame[i].name, 50, 550 + i * 20, this._smallText);
+      this.drawText(hallOfFame[i].score, 200, 550 + i * 20, this._smallTextRight);
+    }
+  } else {
+    this._ctx.fillStyle = '#000000';
+    this._ctx.fillRect(40, 500, 200, 230);
   }
 }
 
@@ -104,6 +134,19 @@ Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndex
   // Draw lives
   this._removeLives(ship.MAX_LIVES);
   this._drawLives(ship.lives);
+}
+
+Render.prototype.drawNameEntry = function() {
+  this.drawText('NAME:', 470, 600, this._subTitle);
+}
+
+Render.prototype.drawNameLetter = function(letter, position) {
+  this.drawText(letter, 520 + position * 15, 600, this._subTitle);
+}
+
+Render.prototype.clearNameEnter = function() {
+  this._ctx.fillStyle = '#000000';
+  this._ctx.fillRect(400, 500, 200, 200);
 }
 
 Render.prototype._canvasRotation = function(x, y, angle) {

@@ -21,6 +21,10 @@ function Game(render) {
   this._mute = false;
   this._state = this._INIT_STATE;
   this._helpVisible = false;
+  this._playerName = "---"
+  this._hallOfFame = JSON.parse(localStorage.getItem('highScore') || '[]');
+  this._hallVisible = false;
+  this._nameLetters = -1;
 
   this._ship = new Ship();
   this._asteroids = [];
@@ -36,6 +40,7 @@ function Game(render) {
 Game.prototype.init = function() {
   this._assignControlsToKeys();
   this._drawSplash();
+  document.getElementsByTagName('body')[0].style.cursor = 'none';
 }
 
 Game.prototype._beginGame = function() {
@@ -50,6 +55,9 @@ Game.prototype._beginGame = function() {
   this._asteroids = [];
   this._bullets = [];
   this._level = 1;
+  this._helpVisible = false;
+  this._hallVisible = false;
+  this._nameLetters = -1;
 
   this._addAsteroid();
   this._drawGame();
@@ -90,6 +98,7 @@ Game.prototype._gameOver = function() {
   }, false);
   this.audioGameOver.play();  
   this._changeState(this._END_STATE);
+  this._saveHallOfFame(this._playerName, this._score);
   clearInterval(this._gameInterval);
   this._gameInterval = undefined;
   this._render.drawGameOver();
@@ -299,70 +308,114 @@ Game.prototype._increaseScore = function(points) {
   this._scoreToDraw += points;
 }
 
+Game.prototype._saveHallOfFame = function(name, score) {
+  this._hallOfFame.push({name: name, score: score});
+  localStorage.setItem('highScore', JSON.stringify(this._hallOfFame));
+ }
+
+Game.prototype._getHallOfFame = function () {
+  var highScore = JSON.parse(localStorage.getItem('highScore'));
+}
+
 Game.prototype._assignControlsToKeys = function () {
   window.addEventListener('keydown', function (e) {
-    switch (e.keyCode) {
-      case 27: //esc
-        if (this._nowPlaying) {
-          this._gameOver();
-        }
-        break;
+    if (this._nameLetters === -1) {
+      switch (e.keyCode) {
+        case 27: //esc
+          if (this._nowPlaying) {
+            this._gameOver();
+          }
+          break;
+  
+        case 32: //space
+          if (!this._nowPlaying && !this._nowGameOver) {
+            this._beginGame();
+          } else if (this._nowGameOver) {
+            this._drawSplash();
+          }
+          break;
+  
+        case 38: //arrow up
+          break;
+  
+        case 40: //arror down
+          break;
+  
+        case 37: //arror left
+          this._keys.arrowLeft = true;
+          break;
+  
+        case 39: //arrow right
+          this._keys.arrowRight = true;
+          break; 
+  
+        case 70: //F
+          if (this._state === this._INIT_STATE) {
+            this._hallVisible = !this._hallVisible;
+            this._render.drawHallOfFame(this._hallOfFame, this._hallVisible);  
+          }
+          break;
+  
+        case 72: //H
+          if (this._state === this._INIT_STATE) {
+            this._helpVisible = !this._helpVisible;
+            this._render.drawHelp(this._helpVisible);
+          }
+          break;
+  
+        case 78: //N
+          if (this._state === this._INIT_STATE) {
+            this._nameLetters = 0;
+            this._playerName = '';
+            this._render.drawNameEntry();
+          } 
+          break;
+  
+        case 83: //S
+          this._muteControl();
+          break;
+      }  
+    } else {
+      if (this._nameLetters < 3) {
+        var char = String.fromCharCode(e.keyCode);
+        this._render.drawNameLetter(char, this._nameLetters);
+        this._playerName += char;
+        this._nameLetters++
+      } else {
+        this._nameLetters = -1;
+      }
 
-      case 32: //space
-        if (!this._nowPlaying && !this._nowGameOver) {
-          this._beginGame();
-        } else if (this._nowGameOver) {
-          this._drawSplash();
-        }
-        break;
-
-      case 38: //arrow up
-        break;
-
-      case 40: //arror down
-        break;
-
-      case 37: //arror left
-        this._keys.arrowLeft = true;
-        break;
-
-      case 39: //arrow right
-        this._keys.arrowRight = true;
-        break; 
-
-      case 72: //H
-        this._helpVisible = !this._helpVisible;
-        this._render.drawHelp(this._helpVisible);
-        break;
-
-      case 83: //S
-        this._muteControl();
-        break;
+      if (this._nameLetters === 3) {
+        this._nameLetters = -1;
+        this._render.clearNameEnter();
+      }
     }
   }.bind(this));
 
   window.addEventListener('keyup', function (e) {
-    switch (e.keyCode) {
-      case 32: //space
-          if (this._nowPlaying) {
-            this._shoot();
-          }
-        break;
-
-      case 38: //arrow up
-        this._ship.increaseSpeed();
-        break;
-
-      case 40: //arror down
-        break;
-
-      case 37: //arror left
-        this._keys.arrowLeft = false;
-        break;
-
-      case 39: //arrow right
-        this._keys.arrowRight = false;
-        break; 
+    if (this._nameLetters === -1) {
+      switch (e.keyCode) {
+        case 32: //space
+            if (this._nowPlaying) {
+              this._shoot();
+            }
+          break;
+  
+        case 38: //arrow up
+          this._ship.increaseSpeed();
+          break;
+  
+        case 40: //arror down
+          break;
+  
+        case 37: //arror left
+          this._keys.arrowLeft = false;
+          break;
+  
+        case 39: //arrow right
+          this._keys.arrowRight = false;
+          break; 
+      }  
     }
   }.bind(this));
 }
