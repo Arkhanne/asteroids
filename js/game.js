@@ -9,7 +9,6 @@ function Game(render) {
   this._nowGameOver = false;
   this._canShoot = false;
   this._firstShoot = true;
-  // this._timeToShoot = 0;
   this._keys = {arrowRight: false,
                 arrowLeft: false};
   this._gameInterval;
@@ -19,6 +18,8 @@ function Game(render) {
   this._score = 0;
   this._scoreToDraw = 0;
   this._level = 1;
+  this._mute = false;
+  this._state = this._INIT_STATE;
 
   this._ship = new Ship();
   this._asteroids = [];
@@ -94,6 +95,8 @@ Game.prototype._gameOver = function() {
 }
 
 Game.prototype._changeState = function(newState) {
+  this._state = newState;
+
   switch (newState) {
     case this._INIT_STATE:
       this._nowPlaying = false;
@@ -257,11 +260,6 @@ Game.prototype._shoot = function() {
     this._canShoot = false;
 
     setTimeout(this._setCanShoot.bind(this), this._TIME_TO_SHOOT);
-  //   this._canShoot = false
-  //   this._timeToShoot = this._TIME_TO_SHOOT;
-  // } else {
-  //   this._timeToShoot--;
-  //   this._canShoot = this._timeToShoot === 0;
   } else if(this._firstShoot) {
     this._canShoot = true;
     this._firstShoot = false;
@@ -304,9 +302,34 @@ Game.prototype._assignControlsToKeys = function () {
         break; 
 
       case 83: //S
-        ;
+        this._muteControl();
+        break;
     }
   }.bind(this));
+
+  Game.prototype._muteControl = function() {
+    if (this._mute) {
+      switch(this._state) {
+        case this._INIT_STATE:
+          this.audioIntro.play();
+          break;
+
+        case this._GAME_STATE:
+          this.audioBackground.play();
+          break;
+
+        case this._END_STATE:
+          this.audioGameOver.play();
+          break;
+      }
+      this._mute = false;
+    } else {
+      this.audioIntro.pause();
+      this.audioGameOver.pause();
+      this.audioBackground.pause();
+      this._mute = true;
+    }
+  }
 
   Game.prototype._increaseScore = function(points) {
     this._scoreToDraw += points;
@@ -315,13 +338,9 @@ Game.prototype._assignControlsToKeys = function () {
   window.addEventListener('keyup', function (e) {
     switch (e.keyCode) {
       case 32: //space
-        // if (!this._canShoot) {
-        //  this. _canShoot = true;
-        // } else {
           if (this._nowPlaying) {
             this._shoot();
           }
-        // }
         break;
 
       case 38: //arrow up
