@@ -43,14 +43,18 @@ Game.prototype._beginGame = function() {
   this._update();
 }
 
-Game.prototype._addAsteroid = function() {
-  this._asteroids.push(new Asteroid);
+Game.prototype._addAsteroid = function(parentAsteroid) {
+  if (parentAsteroid) {
+    this._asteroids.push(new Asteroid(parentAsteroid.x, parentAsteroid.y, parentAsteroid.size + 1));
+  } else {
+    this._asteroids.push(new Asteroid(null, null, 1));
+  }
 }
 
 Game.prototype._drawGame = function() {
   if (this._scoreToDraw > 0) {
-    this._score++
-    this._scoreToDraw--;
+    this._score+=5
+    this._scoreToDraw-=5;
   }
 
   this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes, this._removeShip, this._score);
@@ -101,7 +105,9 @@ Game.prototype._update = function() {
     // Asteroids
     if (this._asteroids) {
       if (this._asteroids.length > 0) {
-        this._asteroids[0].newPosition();
+        this._asteroids.forEach(function(asteroid) {
+          asteroid.newPosition();
+        })
       }
     }
 
@@ -119,19 +125,27 @@ Game.prototype._update = function() {
     }
 
     // Bullet collisions
+    var asteroidsNumber = this._asteroids.length;
     for (var bulletIndex = 0; bulletIndex < this._bullets.length; bulletIndex++) {
       var bullet = this._bullets[bulletIndex];
       
-      for (var asteroidIndex = 0; asteroidIndex < this._asteroids.length; asteroidIndex++) {
+      for (var asteroidIndex = 0; asteroidIndex < asteroidsNumber; asteroidIndex++) {
         var asteroid = this._asteroids[asteroidIndex];
         
-        if ((bullet.x > asteroid.x - 32) && (bullet.x < asteroid.x + 112) && (bullet.y > asteroid.y) && (bullet.y < asteroid.y + 144)) {
+        if ((bullet.x > asteroid.x - 32 / asteroid.size) && (bullet.x < asteroid.x + 112 / asteroid.size) && (bullet.y > asteroid.y) && (bullet.y < asteroid.y + 144 / asteroid.size)
+            || (bullet.x + 3 > asteroid.x - 32 / asteroid.size) && (bullet.x + 3 < asteroid.x + 112 / asteroid.size) && (bullet.y + 3 > asteroid.y) && (bullet.y + 3 < asteroid.y + 144 / asteroid.size)) {
           if (this._removeBulletIndexes.indexOf(bulletIndex) === -1) {
             this._removeBulletIndexes.push(bulletIndex);
           }
 
           if (this._removeAsteroidIndexes.indexOf(asteroidIndex) === -1) {
             this._removeAsteroidIndexes.push(asteroidIndex);
+
+            if (this._asteroids[asteroidIndex].size < 5) {
+              this._addAsteroid(this._asteroids[asteroidIndex]);
+              this._addAsteroid(this._asteroids[asteroidIndex]);
+              this._addAsteroid(this._asteroids[asteroidIndex]);
+            }
           }
         }
       }
@@ -141,7 +155,8 @@ Game.prototype._update = function() {
     for (var asteroidIndex = 0; asteroidIndex < this._asteroids.length; asteroidIndex++) {
       var asteroid = this._asteroids[asteroidIndex];
       
-      if ((this._ship.x > asteroid.x - 32) && (this._ship.x < asteroid.x + 112) && (this._ship.y > asteroid.y) && (this._ship.y < asteroid.y + 144)) {
+      if ((this._ship.x > asteroid.x - 32 / asteroid.size) && (this._ship.x < asteroid.x + 112 / asteroid.size) && (this._ship.y > asteroid.y) && (this._ship.y < asteroid.y + 144 / asteroid.size)
+          || (this._ship.x + 26 > asteroid.x - 32 / asteroid.size) && (this._ship.x + 26 < asteroid.x + 112 / asteroid.size) && (this._ship.y + 18 > asteroid.y) && (this._ship.y + 18 < asteroid.y + 144 / asteroid.size)) {
         this._removeShip = true;
 
         if (this._removeAsteroidIndexes.indexOf(asteroidIndex) === -1) {
@@ -171,8 +186,12 @@ Game.prototype._update = function() {
 
     // Remove asteroids
     for (var i = 0; i < this._removeAsteroidIndexes.length; i++) {
-      this._increaseScore(this._asteroids[this._removeAsteroidIndexes[i]].points);
-      this._asteroids.splice(this._removeAsteroidIndexes[i], 1);
+      // console.log(this._removeAsteroidIndexes);
+      // console.log(i);
+      if (this._asteroids[this._removeAsteroidIndexes[i]]) {
+        this._increaseScore(this._asteroids[this._removeAsteroidIndexes[i]].points);
+        this._asteroids.splice(this._removeAsteroidIndexes[i], 1);
+      }
     }
     this._removeAsteroidIndexes = [];
 
@@ -230,6 +249,7 @@ Game.prototype._assignControlsToKeys = function () {
 
   Game.prototype._increaseScore = function(points) {
     this._scoreToDraw += points;
+    console.log(points);
   }
 
   window.addEventListener('keyup', function (e) {

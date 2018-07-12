@@ -52,7 +52,6 @@ Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndex
   this._ctx.restore(); // Restauro el estado del canvas guardado
   
   // Draw asteroid
-  this._ctx.save(); // Guardo el estado actual del canvas
 
   for (var i = 0; i < asteroids.length; i++) {
     if (removeAsteroidIndexes.indexOf(i) > -1) {
@@ -61,7 +60,8 @@ Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndex
       removeAsteroid = false;
     }
 
-    this.drawAsteroid(asteroids[0],removeAsteroid);
+    this._ctx.save(); // Guardo el estado actual del canvas
+    this.drawAsteroid(asteroids[i], removeAsteroid);
     this._ctx.restore(); // Restauro el estado del canvas guardado
   }
 
@@ -116,7 +116,7 @@ Render.prototype.drawShip = function(ship, removeShip) {
 
 Render.prototype.drawAsteroid = function(asteroid, removeAsteroid) {
   // Canvas rotation
-  this._canvasRotation(asteroid.x + 40, asteroid.y + 77, asteroid.rotationAngle); 
+  this._canvasRotation(asteroid.x + 40 / asteroid.size, asteroid.y + 77 / asteroid.size, asteroid.rotationAngle); 
 
   // Draw asteroid
   if (removeAsteroid) {
@@ -127,18 +127,18 @@ Render.prototype.drawAsteroid = function(asteroid, removeAsteroid) {
 
   this._ctx.beginPath();
   this._ctx.moveTo(asteroid.x, asteroid.y);
-  this._ctx.lineTo(asteroid.x + 80, asteroid.y);
-  this._ctx.lineTo(asteroid.x + 112, asteroid.y + 32);
-  this._ctx.lineTo(asteroid.x + 112, asteroid.y + 72);
-  this._ctx.lineTo(asteroid.x + 96, asteroid.y + 88);
-  this._ctx.lineTo(asteroid.x + 96, asteroid.y + 128);
-  this._ctx.lineTo(asteroid.x + 80, asteroid.y + 144);
-  this._ctx.lineTo(asteroid.x + 40, asteroid.y + 144);
-  this._ctx.lineTo(asteroid.x + 24, asteroid.y + 128);
-  this._ctx.lineTo(asteroid.x - 16, asteroid.y + 128);
-  this._ctx.lineTo(asteroid.x - 32, asteroid.y + 112);
-  this._ctx.lineTo(asteroid.x - 32, asteroid.y + 72);
-  this._ctx.lineTo(asteroid.x, asteroid.y + 40);
+  this._ctx.lineTo(asteroid.x + 80 / asteroid.size, asteroid.y);
+  this._ctx.lineTo(asteroid.x + 112 / asteroid.size, asteroid.y + 32 / asteroid.size);
+  this._ctx.lineTo(asteroid.x + 112 / asteroid.size, asteroid.y + 72 / asteroid.size);
+  this._ctx.lineTo(asteroid.x + 96 / asteroid.size, asteroid.y + 88 / asteroid.size);
+  this._ctx.lineTo(asteroid.x + 96 / asteroid.size, asteroid.y + 128 / asteroid.size);
+  this._ctx.lineTo(asteroid.x + 80 / asteroid.size, asteroid.y + 144 / asteroid.size);
+  this._ctx.lineTo(asteroid.x + 40 / asteroid.size, asteroid.y + 144 / asteroid.size);
+  this._ctx.lineTo(asteroid.x + 24 / asteroid.size, asteroid.y + 128 / asteroid.size);
+  this._ctx.lineTo(asteroid.x - 16 / asteroid.size, asteroid.y + 128 / asteroid.size);
+  this._ctx.lineTo(asteroid.x - 32 / asteroid.size, asteroid.y + 112 / asteroid.size);
+  this._ctx.lineTo(asteroid.x - 32 / asteroid.size, asteroid.y + 72 / asteroid.size);
+  this._ctx.lineTo(asteroid.x, asteroid.y + 40 / asteroid.size);
   this._ctx.closePath();
   this._ctx.stroke();
 }

@@ -1,5 +1,5 @@
 function Ship() {
-  this.MAX_LIVES = 1;
+  this.MAX_LIVES = 3;
   this.x = 509;
   this.y = 375;
   this.angle = 0;
