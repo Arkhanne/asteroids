@@ -62,18 +62,18 @@ Ship.prototype.newPosition = function() {
     this.y += this.speed * Math.sin(this._moveAngle * 2 * Math.PI / 360);
   
     if (this.x > 1024) {
-      this.x = 0 - 26;
+      this.x = 0;
     }
   
     if (this.y > 768) {
-      this.y = 0 - 18;
+      this.y = 0;
     }
   
-    if (this.x + 26 < 0) {
-      this.x = 1024 + 26
+    if (this.x < 0) {
+      this.x = 1024
     }
   
-    if (this.y + 18 < 0) {
+    if (this.y < 0) {
       this.y = 768;
     }
   }
