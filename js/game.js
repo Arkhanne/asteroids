@@ -2,13 +2,14 @@ function Game(render) {
   this._INIT_STATE = 0;
   this._GAME_STATE = 1
   this._END_STATE = 2;
-  this._TIME_TO_SHOOT = 10;
+  this._TIME_TO_SHOOT = 200;
 
   this._render = render;
   this._nowPlaying = false;
   this._nowGameOver = false;
   this._canShoot = false;
-  this._timeToShoot = 0;
+  this._firstShoot = true;
+  // this._timeToShoot = 0;
   this._keys = {arrowRight: false,
                 arrowLeft: false};
   this._gameInterval;
@@ -36,7 +37,8 @@ Game.prototype.init = function() {
 }
 
 Game.prototype._beginGame = function() {
-  this._canShoot = false;
+  this._canShoot = true;
+  this._firstShoot = true;
   this._removeBulletIndexes = [];
   this._removeAsteroidIndexes = [];
   this._removeShip = false;
@@ -249,16 +251,25 @@ Game.prototype._update = function() {
 Game.prototype._shoot = function() {
   var length;
 
-  if (this._canShoot) {
+  if (this._canShoot && !this._firstShoot) {
     length = this._bullets.push(this._ship.shoot());
     this._bullets[length - 1].initLive();
+    this._canShoot = false;
 
-    this._canShoot = false
-    this._timeToShoot = this._TIME_TO_SHOOT;
-  } else {
-    this._timeToShoot--;
-    this._canShoot = this._timeToShoot === 0;
+    setTimeout(this._setCanShoot.bind(this), this._TIME_TO_SHOOT);
+  //   this._canShoot = false
+  //   this._timeToShoot = this._TIME_TO_SHOOT;
+  // } else {
+  //   this._timeToShoot--;
+  //   this._canShoot = this._timeToShoot === 0;
+  } else if(this._firstShoot) {
+    this._canShoot = true;
+    this._firstShoot = false;
   }
+}
+
+Game.prototype._setCanShoot = function () {
+  this._canShoot = true;
 }
 
 Game.prototype._assignControlsToKeys = function () {
@@ -304,13 +315,13 @@ Game.prototype._assignControlsToKeys = function () {
   window.addEventListener('keyup', function (e) {
     switch (e.keyCode) {
       case 32: //space
-        if (!this._canShoot) {
-         this. _canShoot = true;
-        } else {
+        // if (!this._canShoot) {
+        //  this. _canShoot = true;
+        // } else {
           if (this._nowPlaying) {
             this._shoot();
           }
-        }
+        // }
         break;
 
       case 38: //arrow up
