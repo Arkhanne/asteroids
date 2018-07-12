@@ -22,6 +22,12 @@ function Game(render) {
   this._ship = new Ship();
   this._asteroids = [];
   this._bullets = [];
+
+  this.audioIntro = new Audio('./audio/Splash.mp3');
+  this.audioGameOver = new Audio('./audio/GameOver.mp3');
+  this.audioBangSmall = new Audio('./audio/bangSmall.wav');
+  this.audioBangLarge = new Audio('./audio/bangLarge.wav');
+  this.audioBackground = new Audio('./audio/Kumiku.mp3');
 }
 
 Game.prototype.init = function() {
@@ -44,6 +50,14 @@ Game.prototype._beginGame = function() {
   this._addAsteroid();
   this._drawGame();
   this._changeState(this._GAME_STATE);
+
+  this.audioIntro.pause();
+  this.audioBackground.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+  }, false);
+  this.audioBackground.play();
+
   this._update();
 }
 
@@ -65,6 +79,12 @@ Game.prototype._drawGame = function() {
 }
 
 Game.prototype._gameOver = function() {
+  this.audioBackground.pause();
+  this.audioGameOver.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+  }, false);
+  this.audioGameOver.play();  
   this._changeState(this._END_STATE);
   clearInterval(this._gameInterval);
   this._gameInterval = undefined;
@@ -91,6 +111,12 @@ Game.prototype._changeState = function(newState) {
 } 
 
 Game.prototype._drawSplash = function() {
+  this.audioGameOver.pause();
+  this.audioIntro.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+  }, false);
+  this.audioIntro.play();
   this._render.drawSplash();
   this._changeState(this._INIT_STATE);
 }
@@ -146,6 +172,7 @@ Game.prototype._update = function() {
 
           if (this._removeAsteroidIndexes.indexOf(asteroidIndex) === -1) {
             this._removeAsteroidIndexes.push(asteroidIndex);
+            this.audioBangSmall.play();
 
             if (this._asteroids[asteroidIndex].size < 5) {
               this._addAsteroid(this._asteroids[asteroidIndex]);
@@ -164,6 +191,7 @@ Game.prototype._update = function() {
       if ((this._ship.x > asteroid.x - 32 / asteroid.size) && (this._ship.x < asteroid.x + 112 / asteroid.size) && (this._ship.y > asteroid.y) && (this._ship.y < asteroid.y + 144 / asteroid.size)
           || (this._ship.x + 26 > asteroid.x - 32 / asteroid.size) && (this._ship.x + 26 < asteroid.x + 112 / asteroid.size) && (this._ship.y + 18 > asteroid.y) && (this._ship.y + 18 < asteroid.y + 144 / asteroid.size)) {
         this._removeShip = true;
+        this.audioBangLarge.play();
 
         if (this._removeAsteroidIndexes.indexOf(asteroidIndex) === -1) {
           asteroid.points = 0; 
@@ -175,10 +203,6 @@ Game.prototype._update = function() {
     // Lives control
     if (this._removeShip) {
       this._ship.lives--;
-
-      // if (this._ship.lives > 0) {
-      //   this._removeShip = false;
-      // }
     }
 
     // Render
@@ -267,6 +291,9 @@ Game.prototype._assignControlsToKeys = function () {
       case 39: //arrow right
         this._keys.arrowRight = true;
         break; 
+
+      case 83: //S
+        ;
     }
   }.bind(this));
 

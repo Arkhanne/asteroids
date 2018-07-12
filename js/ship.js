@@ -7,6 +7,9 @@ function Ship() {
   this._moveAngle = 0;
   this.lives = this._MAX_LIVES;
   this.speed = 0;
+  
+  this.audioShoot = new Audio('./audio/fire.wav');
+  this.audioSpeed = new Audio('./audio/thrust.wav');
 }
 
 Ship.prototype.rotateRight = function() {
@@ -43,6 +46,8 @@ Ship.prototype.shoot = function() {
   var x = this.x + 13 + (13 * Math.cos(this.angle * 2 * Math.PI / 360));
   var y = this.y + 9 + (13 * Math.sin(this.angle * 2 * Math.PI / 360));
   
+  this. audioShoot.play();
+
   return new Bullet(x, y, this.angle);
 }
 
@@ -54,6 +59,8 @@ Ship.prototype.increaseSpeed = function() {
   } else {
     this._moveAngle = this.angle;
   }
+
+  this.audioSpeed.play();
 }
 
 Ship.prototype.newPosition = function() {
