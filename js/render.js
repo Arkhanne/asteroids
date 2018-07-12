@@ -48,7 +48,7 @@ Render.prototype.drawHelp = function(visible) {
     this.drawText('<S>     --> Music ON/OFF', 700, 690, this._smallText);
   } else {
     this._ctx.fillStyle = '#000000';
-    this._ctx.fillRect(650, 550, 300, 150);
+    this._ctx.fillRect(650, 550, 310, 150);
   }
 }
 
