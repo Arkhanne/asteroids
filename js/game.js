@@ -2,6 +2,7 @@ function Game(render) {
   this._INIT_STATE = 0;
   this._GAME_STATE = 1
   this._END_STATE = 2;
+  this._TIME_TO_SHOOT = 10;
 
   this._render = render;
   this._nowPlaying = false;
@@ -102,6 +103,8 @@ Game.prototype._update = function() {
     if (this._keys.arrowLeft) {
       this._ship.rotateLeft();
     }
+
+    this._ship.newPosition();
   
     // Asteroids
     if (this._asteroids) {
@@ -219,8 +222,6 @@ Game.prototype._shoot = function() {
     this._timeToShoot--;
     this._canShoot = this._timeToShoot === 0;
   }
-
-
 }
 
 Game.prototype._assignControlsToKeys = function () {
@@ -273,6 +274,7 @@ Game.prototype._assignControlsToKeys = function () {
         break;
 
       case 38: //arrow up
+        this._ship.increaseSpeed();
         break;
 
       case 40: //arror down
