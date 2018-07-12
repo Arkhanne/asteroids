@@ -7,6 +7,7 @@ function Game(render) {
   this._nowPlaying = false;
   this._nowGameOver = false;
   this._canShoot = false;
+  this._timeToShoot = 0;
   this._keys = {arrowRight: false,
                 arrowLeft: false};
   this._gameInterval;
@@ -186,8 +187,6 @@ Game.prototype._update = function() {
 
     // Remove asteroids
     for (var i = 0; i < this._removeAsteroidIndexes.length; i++) {
-      // console.log(this._removeAsteroidIndexes);
-      // console.log(i);
       if (this._asteroids[this._removeAsteroidIndexes[i]]) {
         this._increaseScore(this._asteroids[this._removeAsteroidIndexes[i]].points);
         this._asteroids.splice(this._removeAsteroidIndexes[i], 1);
@@ -210,8 +209,18 @@ Game.prototype._update = function() {
 Game.prototype._shoot = function() {
   var length;
 
-  length = this._bullets.push(this._ship.shoot());
-  this._bullets[length - 1].initLive();
+  if (this._canShoot) {
+    length = this._bullets.push(this._ship.shoot());
+    this._bullets[length - 1].initLive();
+
+    this._canShoot = false
+    this._timeToShoot = this._TIME_TO_SHOOT;
+  } else {
+    this._timeToShoot--;
+    this._canShoot = this._timeToShoot === 0;
+  }
+
+
 }
 
 Game.prototype._assignControlsToKeys = function () {
@@ -249,7 +258,6 @@ Game.prototype._assignControlsToKeys = function () {
 
   Game.prototype._increaseScore = function(points) {
     this._scoreToDraw += points;
-    console.log(points);
   }
 
   window.addEventListener('keyup', function (e) {
