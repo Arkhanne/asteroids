@@ -63,6 +63,14 @@ Ship.prototype.increaseSpeed = function() {
   this.audioSpeed.play();
 }
 
+Ship.prototype.decreaseSpeed = function() {
+  if (this.speed > 0) {
+    this.speed--;
+  }  
+
+  this.audioSpeed.play();
+}
+
 Ship.prototype.newPosition = function() {
   if (this.speed > 0) {
     this.x += this.speed * Math.cos(this._moveAngle * 2 * Math.PI / 360);

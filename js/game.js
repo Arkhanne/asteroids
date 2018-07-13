@@ -433,6 +433,7 @@ Game.prototype._assignControlsToKeys = function () {
           break;
   
         case 40: //arror down
+          this._ship.decreaseSpeed();
           break;
   
         case 37: //arror left

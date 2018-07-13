@@ -47,14 +47,15 @@ Render.prototype.drawSplash = function() {
 
 Render.prototype.drawHelp = function(visible) {
   if (visible) {
-    this.drawText('<LEFT>  --> Rotate left', 700, 570, this._smallText);
-    this.drawText('<RIGHT> --> Rotate right', 700, 600, this._smallText);
-    this.drawText('<UP>    --> Increase speed', 700, 630, this._smallText);
-    this.drawText('<SPACE> --> Shoot', 700, 660, this._smallText);
-    this.drawText('<S>     --> Music ON/OFF', 700, 690, this._smallText);
+    this.drawText('<LEFT>  --> Rotate left', 700, 560, this._smallText);
+    this.drawText('<RIGHT> --> Rotate right', 700, 590, this._smallText);
+    this.drawText('<UP>    --> Increase speed', 700, 620, this._smallText);
+    this.drawText('<DOWN>  --> Decrease speed', 700, 650, this._smallText);
+    this.drawText('<SPACE> --> Shoot', 700, 680, this._smallText);
+    this.drawText('<S>     --> Music ON/OFF', 700, 710, this._smallText);
   } else {
     this._ctx.fillStyle = '#000000';
-    this._ctx.fillRect(650, 550, 310, 150);
+    this._ctx.fillRect(650, 550, 310, 170);
   }
 }
 
