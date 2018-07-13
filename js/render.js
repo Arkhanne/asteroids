@@ -89,7 +89,7 @@ Render.prototype.drawGameOver = function() {
   this.drawText('PRESS INTRO TO RESTART', 500, 470, this._subTitle);
 }
 
-Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndexes, removeAsteroidIndexes, removeShip, score, lives) {
+Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndexes, removeAsteroidIndexes, removeShip, score, shipInvulnerable) {
   var removeBullet = false;
   var removeAsteroid = false;
 
@@ -97,7 +97,7 @@ Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndex
   
   // Draw ship
   this._ctx.save(); // Guardo el estado actual del canvas
-  this.drawShip(ship, removeShip);
+  this.drawShip(ship, removeShip, shipInvulnerable);
   this._ctx.restore(); // Restauro el estado del canvas guardado
   
   // Draw asteroid
@@ -156,7 +156,7 @@ Render.prototype._canvasRotation = function(x, y, angle) {
   this._ctx.translate(-x, -y); // Traslado el eje 0,0 a su posición original
 }
 
-Render.prototype.drawShip = function(ship, removeShip) {
+Render.prototype.drawShip = function(ship, removeShip, invulnerable) {
   // Canvas rotation
   this._canvasRotation(ship.x + 13, ship.y + 9, ship.angle);        
 
@@ -164,7 +164,11 @@ Render.prototype.drawShip = function(ship, removeShip) {
   if (removeShip) {
     this._ctx.strokeStyle = '#000000';
   } else {
-    this._ctx.strokeStyle = '#FFFFFF';
+    if (invulnerable) {
+      this._ctx.strokeStyle = '#FF0000';
+    } else {
+      this._ctx.strokeStyle = '#FFFFFF';
+    }
   }
 
   this._ctx.beginPath();

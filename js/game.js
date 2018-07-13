@@ -26,6 +26,7 @@ function Game(render) {
   this._hallOfFame = JSON.parse(localStorage.getItem('highScore') || '[]');
   this._hallVisible = false;
   this._nameLetters = -1;
+  this._shipInvulnerable = false;
 
   this._ship = new Ship();
   this._asteroids = [];
@@ -60,6 +61,7 @@ Game.prototype._beginGame = function() {
   this._helpVisible = false;
   this._hallVisible = false;
   this._nameLetters = -1;
+  this._shipInvulnerable = false;
 
   this._addAsteroid();
   this._drawGame();
@@ -98,7 +100,7 @@ Game.prototype._drawGame = function() {
     this.audioExtraLive.play();
   }
 
-  this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes, this._removeShip, this._score);
+  this._render.drawGame(this._ship, this._asteroids, this._bullets, this._removeBulletIndexes, this._removeAsteroidIndexes, this._removeShip, this._score, this._shipInvulnerable);
 }
 
 Game.prototype._gameOver = function() {
@@ -211,21 +213,25 @@ Game.prototype._update = function() {
     }
 
     // Asteroid collisions
-    for (var asteroidIndex = 0; asteroidIndex < this._asteroids.length; asteroidIndex++) {
-      var asteroid = this._asteroids[asteroidIndex];
-      
-      if ((this._ship.x > asteroid.x - 32 / asteroid.size) && (this._ship.x < asteroid.x + 112 / asteroid.size) && (this._ship.y > asteroid.y) && (this._ship.y < asteroid.y + 144 / asteroid.size)
-          || (this._ship.x + 26 > asteroid.x - 32 / asteroid.size) && (this._ship.x + 26 < asteroid.x + 112 / asteroid.size) && (this._ship.y + 18 > asteroid.y) && (this._ship.y + 18 < asteroid.y + 144 / asteroid.size)) {
-        this._removeShip = true;
-        this.audioBangLarge.play();
-
-        if (this._removeAsteroidIndexes.indexOf(asteroidIndex) === -1) {
-          asteroid.points = 0; 
-          this._removeAsteroidIndexes.push(asteroidIndex);
+    if (!this._shipInvulnerable) {
+      for (var asteroidIndex = 0; asteroidIndex < this._asteroids.length; asteroidIndex++) {
+        var asteroid = this._asteroids[asteroidIndex];
+        
+        if ((this._ship.x > asteroid.x - 32 / asteroid.size) && (this._ship.x < asteroid.x + 112 / asteroid.size) && (this._ship.y > asteroid.y) && (this._ship.y < asteroid.y + 144 / asteroid.size)
+            || (this._ship.x + 26 > asteroid.x - 32 / asteroid.size) && (this._ship.x + 26 < asteroid.x + 112 / asteroid.size) && (this._ship.y + 18 > asteroid.y) && (this._ship.y + 18 < asteroid.y + 144 / asteroid.size)) {
+          this._removeShip = true;
+          this._shipInvulnerable = true;
+          setTimeout(this._setShipVulnerable.bind(this), 2000);
+          this.audioBangLarge.play();
+  
+          if (this._removeAsteroidIndexes.indexOf(asteroidIndex) === -1) {
+            asteroid.points = 0; 
+            this._removeAsteroidIndexes.push(asteroidIndex);
+          }
         }
-      }
+      }  
     }
-
+    
     // Lives control
     if (this._removeShip) {
       this._ship.lives--;
@@ -270,6 +276,10 @@ Game.prototype._update = function() {
 
     this._gameInterval = window.requestAnimationFrame(this._update.bind(this));
   }
+}
+
+Game.prototype._setShipVulnerable = function() {
+  this._shipInvulnerable = false;
 }
 
 Game.prototype._shoot = function() {
