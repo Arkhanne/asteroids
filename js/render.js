@@ -85,7 +85,8 @@ Render.prototype.drawHallOfFame = function(hallOfFame, visible) {
 Render.prototype.drawGameOver = function() {
   this._resetCanvas();
   this.drawText('GAME OVER', 500, 300, this._mainTitle);
-  this.drawText('THANKS FOR PLAYING ASTEROIDS', 500, 400, this._subTitle);
+  this.drawText('THANKS FOR PLAYING ASTEROIDS', 500, 380, this._subTitle);
+  this.drawText('PRESS INTRO TO RESTART', 500, 470, this._subTitle);
 }
 
 Render.prototype.drawGame = function(ship, asteroids, bullets, removeBulletIndexes, removeAsteroidIndexes, removeShip, score, lives) {

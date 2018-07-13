@@ -332,6 +332,12 @@ Game.prototype._assignControlsToKeys = function () {
   window.addEventListener('keydown', function (e) {
     if (this._nameLetters === -1) {
       switch (e.keyCode) {
+        case 13:
+          if (this._nowGameOver) {
+            this._drawSplash();
+          }
+          break;
+
         case 27: //esc
           if (this._nowPlaying) {
             this._gameOver();
@@ -341,9 +347,9 @@ Game.prototype._assignControlsToKeys = function () {
         case 32: //space
           if (!this._nowPlaying && !this._nowGameOver) {
             this._beginGame();
-          } else if (this._nowGameOver) {
-            this._drawSplash();
-          }
+          } //else if (this._nowGameOver) {
+          //   this._drawSplash();
+          // }
           break;
   
         case 38: //arrow up
